@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import * as React from 'react';
 import { Journalist, User, AdminCredentials, GuestUserCredentials } from './types';
 import LoginPage from './components/LoginPage';
 import VotingPage from './components/VotingPage';
@@ -16,13 +16,13 @@ const INITIAL_JOURNALISTS: Journalist[] = [
 ];
 
 const App: React.FC = () => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [journalists, setJournalists] = useState<Journalist[]>(INITIAL_JOURNALISTS);
-  const [adminCredentials, setAdminCredentials] = useState<AdminCredentials>({ email: 'admin@example.com', pass: 'password123' });
-  const [guestUsers, setGuestUsers] = useState<GuestUserCredentials[]>([]);
+  const [currentUser, setCurrentUser] = React.useState<User | null>(null);
+  const [journalists, setJournalists] = React.useState<Journalist[]>(INITIAL_JOURNALISTS);
+  const [adminCredentials, setAdminCredentials] = React.useState<AdminCredentials>({ email: 'admin@example.com', pass: 'password123' });
+  const [guestUsers, setGuestUsers] = React.useState<GuestUserCredentials[]>([]);
 
 
-  const handleLogin = useCallback((email: string, pass: string) => {
+  const handleLogin = React.useCallback((email: string, pass: string) => {
     // Check for admin
     if (email === adminCredentials.email && pass === adminCredentials.pass) {
       setCurrentUser({ email, role: 'admin' });
@@ -34,11 +34,11 @@ const App: React.FC = () => {
     setCurrentUser({ email, role: 'user' });
   }, [adminCredentials]);
 
-  const handleLogout = useCallback(() => {
+  const handleLogout = React.useCallback(() => {
     setCurrentUser(null);
   }, []);
 
-  const handleVote = useCallback((journalistId: number) => {
+  const handleVote = React.useCallback((journalistId: number) => {
     setJournalists(prevJournalists =>
       prevJournalists.map(j =>
         j.id === journalistId ? { ...j, votes: j.votes + 1 } : j
@@ -46,17 +46,17 @@ const App: React.FC = () => {
     );
   }, []);
 
-  const handleResetVotes = useCallback(() => {
+  const handleResetVotes = React.useCallback(() => {
     setJournalists(prevJournalists =>
       prevJournalists.map(j => ({ ...j, votes: 0 }))
     );
   }, []);
   
-  const handleUpdateAdminCredentials = useCallback((newCreds: AdminCredentials) => {
+  const handleUpdateAdminCredentials = React.useCallback((newCreds: AdminCredentials) => {
     setAdminCredentials(newCreds);
   }, []);
 
-  const handleAddJournalist = useCallback((name: string, imageUrl: string) => {
+  const handleAddJournalist = React.useCallback((name: string, imageUrl: string) => {
     const newJournalist: Journalist = {
         id: Date.now(),
         name,
@@ -66,7 +66,7 @@ const App: React.FC = () => {
     setJournalists(prev => [...prev, newJournalist]);
   }, []);
 
-  const handleDeleteJournalist = useCallback((id: number) => {
+  const handleDeleteJournalist = React.useCallback((id: number) => {
       if (window.confirm('آیا از حذف این خبرنگار مطمئن هستید؟ این عمل آرا او را نیز پاک می‌کند.')) {
           setJournalists(prev => prev.filter(j => j.id !== id));
       }
